@@ -1,9 +1,9 @@
-#include <texteditor/application.h>
-#include <texteditor/example.h>
 #include <stdio.h>
 
-int app_run(int argc, char *argv[])
-{
+#include <texteditor/application.h>
+#include <texteditor/example.h>
+
+int app_run(int argc, char *argv[]) {
     char *temp = "";
 
     for (int i = 1; i < argc; i++) {
