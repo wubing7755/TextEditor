@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(code --list-extensions)",
+      "Bash(grep -iE \"cpp|c\\\\\\\\+|msvc|debug|cmake\")"
+    ]
+  }
+}
