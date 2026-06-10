@@ -2,12 +2,11 @@
 #include <texteditor/example.h>
 #include <stdio.h>
 
-int app_run(int argc, char * argv[])
+int app_run(int argc, char *argv[])
 {
-    char* temp = "";
+    char *temp = "";
 
-    for (int i = 1; i < argc; i ++)
-    {
+    for (int i = 1; i < argc; i++) {
         temp = argv[i];
 
         printf("%s\n", temp);
