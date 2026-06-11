@@ -54,6 +54,17 @@ Use short branch names:
 - `infra/<topic>`
 - `release/<version>`
 
+Start new work from an up-to-date default branch:
+
+```sh
+git switch main
+git pull
+git switch -c infra/example-change
+```
+
+Use `master` instead of `main` when working in a clone whose default branch is
+`master`.
+
 ## Commits And PRs
 
 Use Conventional Commit style where practical:
@@ -73,6 +84,40 @@ Before opening a PR:
 - Link to updated docs when the change affects build, test, install, release,
   security, or public API behavior.
 - Keep unrelated cleanup out of feature or fix PRs.
+
+Check, commit, and push the branch before opening a pull request:
+
+```sh
+git status
+git diff --check
+git add <changed-files>
+git commit -m "infra: describe the change"
+git push -u origin infra/example-change
+```
+
+Create the PR against `main` or `master` through GitHub, or with GitHub CLI:
+
+```sh
+gh pr create --base main --head infra/example-change --fill
+```
+
+Push follow-up commits to the same branch to update the existing PR:
+
+```sh
+git add <changed-files>
+git commit -m "fix: address review feedback"
+git push
+```
+
+After the PR is merged, update the default branch and delete the local topic
+branch:
+
+```sh
+git switch main
+git pull
+git branch -d infra/example-change
+git remote prune origin
+```
 
 Use the issue templates for bug reports, feature proposals, and infrastructure
 maintenance requests.
