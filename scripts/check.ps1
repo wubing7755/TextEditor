@@ -30,11 +30,9 @@ if (-not $SkipFormat -and (Get-Command clang-format -ErrorAction SilentlyContinu
     $files = Get-ChildItem -Path include,src,tests -Recurse -File -Include *.c,*.h,*.cpp |
         Sort-Object FullName
     if ($files.Count -gt 0) {
-        Invoke-CheckedCommand -Command "clang-format" -Arguments @(
-            "--dry-run",
-            "--Werror",
-            $files.FullName
-        )
+        $formatArguments = @("--dry-run", "--Werror")
+        $formatArguments += @($files | ForEach-Object { $_.FullName })
+        Invoke-CheckedCommand -Command "clang-format" -Arguments $formatArguments
     }
 } elseif (-not $SkipFormat) {
     Write-Host "Skipping clang-format: command not found."
