@@ -68,3 +68,9 @@ On Linux/macOS:
 
 Update local docs when build commands, CMake usage, dependencies, testing policy,
 release policy, security policy, or public API expectations change.
+
+## Pull Requests
+
+AI-assisted PRs must use `.github/pull_request_template.md`, keep the required
+sections, mark the AI assistance checkbox, and list the docs read and validation
+run.
