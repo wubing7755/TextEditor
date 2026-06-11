@@ -34,6 +34,8 @@ AI agents should not independently:
 
 PRs should disclose meaningful AI assistance, list docs read, summarize what
 was changed, and record validation.
+AI-assisted PRs must keep the `.github/pull_request_template.md` sections,
+mark the AI assistance checkbox, and fill in docs read plus validation run.
 
 ## Playbooks
 

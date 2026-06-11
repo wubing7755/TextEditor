@@ -1,0 +1,77 @@
+name: PR Template
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize, ready_for_review]
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  check:
+    name: Check PR description
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate PR body
+        env:
+          PR_BODY: ${{ github.event.pull_request.body || '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          body="${PR_BODY}"
+          failed=0
+
+          require_text() {
+            local text="$1"
+            if [[ "$body" != *"$text"* ]]; then
+              echo "::error::PR description is missing required text: $text"
+              failed=1
+            fi
+          }
+
+          checked_line() {
+            local label="$1"
+            printf '%s\n' "$body" | grep -Fqi -- "- [x] $label"
+          }
+
+          require_text "## Summary"
+          require_text "- What changed:"
+          require_text "- Why:"
+          require_text "## Validation"
+          require_text "## Impact"
+          require_text "- Public API impact:"
+          require_text "- Build, CI, packaging, or release impact:"
+          require_text "- Documentation impact:"
+          require_text "## AI Assistance"
+
+          validation_count=0
+          checked_line '`./scripts/check.sh` or `./scripts/check.ps1`' && validation_count=$((validation_count + 1))
+          checked_line "Additional relevant preset, smoke, or manual checks:" && validation_count=$((validation_count + 1))
+          checked_line "Not run; reason:" && validation_count=$((validation_count + 1))
+
+          if [[ "$validation_count" -eq 0 ]]; then
+            echo "::error::PR description must mark at least one Validation checkbox."
+            failed=1
+          fi
+
+          ai_count=0
+          checked_line "AI assistance was used and disclosed, including docs read and validation run." && {
+            ai_count=$((ai_count + 1))
+          }
+          checked_line "No meaningful AI assistance was used." && ai_count=$((ai_count + 1))
+
+          if [[ "$ai_count" -ne 1 ]]; then
+            echo "::error::PR description must mark exactly one AI Assistance checkbox."
+            failed=1
+          fi
+
+          exit "$failed"
