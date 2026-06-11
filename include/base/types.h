@@ -1,6 +1,6 @@
 #ifndef TYPES
 #define TYPES
 
-typedef const char* string;
+typedef const char *string;
 
 #endif
