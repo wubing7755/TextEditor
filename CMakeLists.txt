@@ -34,7 +34,7 @@ option(TEXTEDITOR_INSTALL "Generate install rules" ${TEXTEDITOR_IS_TOP_LEVEL_DEF
 set(TEXTEDITOR_GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated/include")
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/texteditor_version.h.in"
-    "${TEXTEDITOR_GENERATED_INCLUDE_DIR}/texteditor/version.h"
+    "${TEXTEDITOR_GENERATED_INCLUDE_DIR}/utils/version.h"
     @ONLY
 )
 
@@ -71,6 +71,7 @@ if(TEXTEDITOR_BUILD_EXAMPLE)
     target_link_libraries(texteditor_example PRIVATE texteditor_core)
     texteditor_target_defaults(texteditor_example)
     set_target_properties(texteditor_example PROPERTIES
+        OUTPUT_NAME "td"
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
     )
 endif()

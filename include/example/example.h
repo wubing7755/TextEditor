@@ -1,8 +1,8 @@
 #ifndef TEXTEDITOR_EXAMPLE_H
 #define TEXTEDITOR_EXAMPLE_H
 
-#include <texteditor/compiler.h>
-#include <texteditor/export.h>
+#include <base/compiler.h>
+#include <base/export.h>
 
 #ifdef __cplusplus
 extern "C" {

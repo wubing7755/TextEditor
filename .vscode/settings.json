@@ -7,6 +7,6 @@
   "cmake.buildTarget": "all",
   "C_Cpp.intelliSenseEngine": "disabled",
   "cmake.debugConfig": {
-  "args": ["arg1", "arg2", "arg3"]
+  "args": ["-n", "temp.txt"]
   }
 }

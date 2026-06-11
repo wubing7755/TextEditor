@@ -376,7 +376,7 @@ The project version is declared once:
 project(TextEditor VERSION 0.1.0 LANGUAGES C)
 ```
 
-CMake generates `texteditor/version.h` from that value. Source files should use the
+CMake generates `utils/version.h` from that value. Source files should use the
 generated macros instead of duplicating literal version numbers.
 
 ## Local Quality Checks

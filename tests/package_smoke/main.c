@@ -1,4 +1,4 @@
-#include <texteditor/example.h>
+#include <example/example.h>
 
 int main(void) {
     TextEditorVersion version = texteditor_version();
