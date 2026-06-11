@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(code --list-extensions)",
-      "Bash(grep -iE \"cpp|c\\\\\\\\+|msvc|debug|cmake\")"
+      "Bash(grep -iE \"cpp|c\\\\\\\\+|msvc|debug|cmake\")",
+      "Bash(which clang-format:*)",
+      "Bash(where clang-format:*)"
     ]
   }
 }
