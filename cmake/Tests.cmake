@@ -37,11 +37,11 @@ endfunction()
 
 set(TEXTEDITOR_TEST_TARGETS "")
 
-texteditor_add_test(texteditor_example_tests
+texteditor_add_test(texteditor_exe_tests
     SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_example.c
     LIBS
-        texteditor_core
+        texteditor_lib
 )
 
 add_custom_target(texteditor_tests

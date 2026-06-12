@@ -110,7 +110,7 @@ The install rules generate a CMake package config:
 
 ```cmake
 find_package(TextEditor CONFIG REQUIRED)
-target_link_libraries(app PRIVATE TextEditor::texteditor_core)
+target_link_libraries(app PRIVATE TextEditor::texteditor_lib)
 ```
 
 The `tests/package_smoke/` project validates installed C and C++ consumers.

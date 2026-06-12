@@ -176,15 +176,16 @@ write `compile_commands.json` into the preset build directory.
 These options can be passed during configure:
 
 ```sh
-cmake --preset ninja-debug -DTEXTEDITOR_BUILD_EXAMPLE=OFF
+cmake --preset ninja-debug -DTEXTEDITOR_BUILD_EXE=OFF
 ```
 
 | Option | Meaning |
 | --- | --- |
 | `BUILD_SHARED_LIBS` | Builds libraries as shared libraries when supported. |
-| `TEXTEDITOR_BUILD_EXAMPLE` | Builds `src/main.c` as the example executable. |
+| `TEXTEDITOR_BUILD_EXE` | Builds `src/main.c` as the TextEditor executable. |
 | `TEXTEDITOR_BUILD_TESTING` | Builds CTest test targets. |
 | `TEXTEDITOR_INSTALL` | Generates install rules. |
+| `TEXTEDITOR_DEVELOPMENT_LOGS` | Includes source file and line information in runtime logs. Defaults to on for single-config Debug builds and off otherwise. |
 | `TEXTEDITOR_ENABLE_ASAN` | Enables AddressSanitizer where supported. |
 | `TEXTEDITOR_ENABLE_UBSAN` | Enables UndefinedBehaviorSanitizer where supported. |
 | `TEXTEDITOR_ENABLE_COVERAGE` | Enables coverage flags where supported. |
@@ -194,6 +195,50 @@ default to off when this project is included through `add_subdirectory()`.
 
 Use `cmake -LAH -S . -B build/ninja-debug` after configuring if you need to
 inspect available cache options.
+
+Override `TEXTEDITOR_DEVELOPMENT_LOGS` when you need release-style user output
+from a debug build, or source file and line information from a release build:
+
+```sh
+cmake --preset ninja-debug -DTEXTEDITOR_DEVELOPMENT_LOGS=OFF
+cmake --preset ninja-release -DTEXTEDITOR_DEVELOPMENT_LOGS=ON
+```
+
+## Build The Windows MSI
+
+The Windows MSI installer uses WiX Toolset v4 or newer. Install WiX first and
+ensure the `wix` command is available on `PATH`.
+
+Build the release executable and MSI with:
+
+```powershell
+./scripts/build-msi.ps1
+```
+
+WiX v7 requires accepting the WiX Toolset OSMF EULA before building. Either
+accept it once:
+
+```powershell
+wix eula accept wix7
+./scripts/build-msi.ps1
+```
+
+Or accept it for this build command:
+
+```powershell
+./scripts/build-msi.ps1 -AcceptWixEula
+```
+
+The script builds the `ninja-release` preset, packages `td.exe`, and writes the
+MSI under `dist/windows/`. The installer uses a graphical install directory
+dialog, installs `td.exe` into the selected directory, and offers an optional
+feature to add that directory to the user `PATH`.
+
+If local PowerShell execution policy blocks direct script execution, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build-msi.ps1
+```
 
 ## Multi-Config Generators
 
@@ -243,7 +288,7 @@ Add implementation files under `src/texteditor/` and public headers under
 
 1. Create the `.c` file under `src/texteditor/`.
 2. Create or update the matching public header under `include/texteditor/`.
-3. Add the new `.c` file to `TEXTEDITOR_CORE_SOURCES` in `cmake/Sources.cmake`.
+3. Add the new `.c` file to `TEXTEDITOR_LIB_SOURCES` in `cmake/Sources.cmake`.
 4. Add tests under `tests/`.
 5. Run `./scripts/check.ps1` or `./scripts/check.sh`.
 
@@ -259,7 +304,7 @@ texteditor_add_test(texteditor_feature_tests
     SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_feature.c
     LIBS
-        texteditor_core
+        texteditor_lib
 )
 ```
 
@@ -288,7 +333,7 @@ A downstream CMake project can then consume it:
 
 ```cmake
 find_package(TextEditor CONFIG REQUIRED)
-target_link_libraries(app PRIVATE TextEditor::texteditor_core)
+target_link_libraries(app PRIVATE TextEditor::texteditor_lib)
 ```
 
 The package smoke project validates this path:
@@ -344,7 +389,7 @@ Projects can also consume this repository directly:
 
 ```cmake
 add_subdirectory(path/to/c-project-standard)
-target_link_libraries(app PRIVATE TextEditor::texteditor_core)
+target_link_libraries(app PRIVATE TextEditor::texteditor_lib)
 ```
 
 The subproject smoke test validates this mode:

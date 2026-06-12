@@ -1,8 +1,8 @@
 #include <app/application.h>
 #include <base/log.h>
-#include <parser/command_parser.h>
+#include <startup/startup_cmd.h>
 
-static const char *error_type_name(ErrorType error_type) {
+static const char *error_type_name(StartupErrorType error_type) {
     switch (error_type) {
     case ERR_NONE:
         return "none";
@@ -20,11 +20,12 @@ static const char *error_type_name(ErrorType error_type) {
 }
 
 int app_run(int argc, char *argv[]) {
-    ParseResult result = parse_command(argc, argv);
+    StartupCmdParseResult result = parse_startup_command(argc, argv);
 
     if (result.error_type != ERR_NONE) {
         LOG_ERROR("%s", error_type_name(result.error_type));
+        return 1;
     }
 
-    return 0;
+    return execute_startup_command(result);
 }

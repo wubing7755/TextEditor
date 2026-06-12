@@ -16,7 +16,7 @@ function(copy_texteditor_runtime target)
             MINSIZEREL
             NOCONFIG)
         get_target_property(runtime_location
-            TextEditor::texteditor_core
+            TextEditor::texteditor_lib
             "IMPORTED_LOCATION_${config_name}")
         if(runtime_location)
             add_custom_command(TARGET ${target} POST_BUILD
@@ -29,11 +29,11 @@ function(copy_texteditor_runtime target)
 endfunction()
 
 add_executable(package_smoke_c main.c)
-target_link_libraries(package_smoke_c PRIVATE TextEditor::texteditor_core)
+target_link_libraries(package_smoke_c PRIVATE TextEditor::texteditor_lib)
 copy_texteditor_runtime(package_smoke_c)
 
 add_executable(package_smoke_cxx cxx_header_smoke.cpp)
-target_link_libraries(package_smoke_cxx PRIVATE TextEditor::texteditor_core)
+target_link_libraries(package_smoke_cxx PRIVATE TextEditor::texteditor_lib)
 copy_texteditor_runtime(package_smoke_cxx)
 
 enable_testing()

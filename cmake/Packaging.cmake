@@ -3,7 +3,7 @@ include(CMakePackageConfigHelpers)
 
 set(TEXTEDITOR_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/TextEditor")
 
-install(TARGETS texteditor_core
+install(TARGETS texteditor_lib
     EXPORT TextEditorTargets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

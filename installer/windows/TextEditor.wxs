@@ -1,0 +1,56 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  <Package
+      Name="TextEditor"
+      Manufacturer="TextEditor Contributors"
+      Version="$(var.ProductVersion)"
+      UpgradeCode="7E3F1800-F9DF-4CC8-9F55-F16A6C90E19A"
+      Scope="perUser">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of TextEditor is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <ui:WixUI Id="WixUI_FeatureTree" InstallDirectory="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.LicenseRtf)" />
+
+    <StandardDirectory Id="LocalAppDataFolder">
+      <Directory Id="INSTALLFOLDER" Name="TextEditor">
+        <Component Id="TextEditorExeComponent" Guid="988263D6-93DB-45F8-9BB4-DF7E0D68643A">
+          <File Id="TextEditorExeFile" Source="$(var.TextEditorExe)" Name="td.exe" KeyPath="yes" />
+        </Component>
+        <Component Id="TextEditorUserPathComponent" Guid="362FA6D4-E79E-4C62-B70C-CE0879113F08">
+          <Environment
+              Id="AddTextEditorToUserPath"
+              Name="PATH"
+              Value="[INSTALLFOLDER]"
+              Action="set"
+              Part="last"
+              System="no" />
+          <RegistryValue
+              Root="HKCU"
+              Key="Software\TextEditor"
+              Name="PathFeature"
+              Type="integer"
+              Value="1"
+              KeyPath="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <Feature
+        Id="MainFeature"
+        Title="TextEditor"
+        Description="Installs the TextEditor command-line executable."
+        Level="1"
+        ConfigurableDirectory="INSTALLFOLDER">
+      <ComponentRef Id="TextEditorExeComponent" />
+      <Feature
+          Id="PathFeature"
+          Title="Add td.exe to PATH"
+          Description="Adds the TextEditor install directory to the current user's PATH environment variable."
+          Level="1">
+        <ComponentRef Id="TextEditorUserPathComponent" />
+      </Feature>
+    </Feature>
+  </Package>
+</Wix>

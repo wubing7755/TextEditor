@@ -8,12 +8,12 @@ endif()
 
 add_subdirectory("${TEXTEDITOR_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/texteditor-standard")
 
-if(NOT TARGET TextEditor::texteditor_core)
-    message(FATAL_ERROR "Expected TextEditor::texteditor_core alias target")
+if(NOT TARGET TextEditor::texteditor_lib)
+    message(FATAL_ERROR "Expected TextEditor::texteditor_lib alias target")
 endif()
 
 foreach(option_name IN ITEMS
-        TEXTEDITOR_BUILD_EXAMPLE
+        TEXTEDITOR_BUILD_EXE
         TEXTEDITOR_BUILD_TESTING
         TEXTEDITOR_INSTALL)
     if(${option_name})
@@ -22,8 +22,8 @@ foreach(option_name IN ITEMS
 endforeach()
 
 foreach(target_name IN ITEMS
-        texteditor_example
-        texteditor_example_tests
+        texteditor_exe
+        texteditor_exe_tests
         texteditor_tests)
     if(TARGET ${target_name})
         message(FATAL_ERROR "${target_name} should not be created by default for subproject builds")
@@ -31,7 +31,7 @@ foreach(target_name IN ITEMS
 endforeach()
 
 add_executable(subproject_smoke main.c)
-target_link_libraries(subproject_smoke PRIVATE TextEditor::texteditor_core)
+target_link_libraries(subproject_smoke PRIVATE TextEditor::texteditor_lib)
 
 enable_testing()
 add_test(NAME subproject_smoke COMMAND subproject_smoke)

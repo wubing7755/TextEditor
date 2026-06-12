@@ -7,8 +7,9 @@ This template does not prescribe a release tool. A typical release should:
 3. Run shared-library, sanitizer, or coverage presets where supported.
 4. Update release notes.
 5. Run static and shared package smoke tests for installable libraries.
-6. Tag the release.
-7. Publish artifacts through CI or a documented local packaging command.
+6. Build platform installers, such as the Windows MSI when publishing Windows artifacts.
+7. Tag the release.
+8. Publish artifacts through CI or a documented local packaging command.
 
 Do not publish releases from AI-assisted changes without maintainer approval.
 
@@ -43,3 +44,14 @@ ctest --preset ninja-asan --output-on-failure
 
 For installable libraries, also run static and shared package smoke tests before
 tagging.
+
+Build the Windows MSI from a Windows shell with WiX Toolset v4 or newer installed:
+
+```powershell
+./scripts/build-msi.ps1
+```
+
+With WiX v7, accept the WiX Toolset OSMF EULA once with `wix eula accept wix7`
+or pass `-AcceptWixEula` to `build-msi.ps1`.
+
+The MSI is written to `dist/windows/`.

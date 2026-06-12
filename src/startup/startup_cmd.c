@@ -1,7 +1,49 @@
-#include <parser/command_parser.h>
-
+#include <base/log.h>
+#include <startup/startup_cmd.h>
+#include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <string.h>
+
+static int create_file_in_current_dir(const char *filename) {
+    FILE *file = NULL;
+
+#if defined(_MSC_VER)
+    if (fopen_s(&file, filename, "w") != 0) {
+        return 1;
+    }
+#else
+    file = fopen(filename, "w");
+    if (file == NULL) {
+        return 1;
+    }
+#endif
+
+    if (file == NULL) {
+        return 1;
+    }
+
+    return fclose(file) == 0 ? 0 : 1;
+}
+
+static bool is_new_file_cmd(StartupCmdType command) {
+    return command == CMD_NEW_FILE;
+}
+
+static bool is_open_file_cmd(StartupCmdType command) {
+    return command == CMD_OPEN_FILE;
+}
+
+static bool is_help_cmd(StartupCmdType command) {
+    return command == CMD_HELP;
+}
+
+static void print_help(void) {
+    printf("Usage:\n");
+    printf("  td -h | -help\n");
+    printf("  td -n | -new <file>\n");
+    printf("  td -o | -open <file>\n");
+}
 
 /*
 Input	            CommandType	    ErrorType	        FileName
@@ -30,8 +72,9 @@ static int is_open_file_command(const char *command) {
     return strcmp(command, "-o") == 0 || strcmp(command, "-open") == 0;
 }
 
-static ParseResult make_result(ErrorType error_type, CmdType cmd_type, string filename) {
-    ParseResult result = {
+static StartupCmdParseResult make_result(StartupErrorType error_type, StartupCmdType cmd_type,
+                                         const char *filename) {
+    StartupCmdParseResult result = {
         error_type,
         cmd_type,
         filename,
@@ -39,9 +82,9 @@ static ParseResult make_result(ErrorType error_type, CmdType cmd_type, string fi
     return result;
 }
 
-ParseResult parse_command(int argc, char *argv[]) {
+StartupCmdParseResult parse_startup_command(int argc, char *argv[]) {
     const char *command = NULL;
-    CmdType file_command = CMD_NONE;
+    StartupCmdType file_command = CMD_NONE;
 
     /* argv[0] is the executable path/name, for example td.exe on Windows. */
     if (argc < 2 || argv == NULL || argv[1] == NULL) {
@@ -74,4 +117,16 @@ ParseResult parse_command(int argc, char *argv[]) {
     }
 
     return make_result(ERR_NONE, file_command, argv[2]);
+}
+
+int execute_startup_command(StartupCmdParseResult result) {
+    if (is_open_file_cmd(result.cmd_type)) {
+
+    } else if (is_new_file_cmd(result.cmd_type)) {
+        return create_file_in_current_dir(result.filename);
+    } else if (is_help_cmd(result.cmd_type)) {
+        print_help();
+    }
+
+    return 0;
 }

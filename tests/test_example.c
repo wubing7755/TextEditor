@@ -1,5 +1,5 @@
 #include <example/example.h>
-#include <parser/command_parser.h>
+#include <startup/startup_cmd.h>
 #include <utils/version.h>
 
 #include "test_assert.h"
@@ -43,9 +43,9 @@ static int test_checked_add(void) {
     return 0;
 }
 
-static int expect_parse_result(int argc, char *argv[], CmdType cmd_type, ErrorType error_type,
-                               const char *filename) {
-    ParseResult result = parse_command(argc, argv);
+static int expect_parse_result(int argc, char *argv[], StartupCmdType cmd_type,
+                               StartupErrorType error_type, const char *filename) {
+    StartupCmdParseResult result = parse_startup_command(argc, argv);
 
     if (!TEXTEDITOR_EXPECT_INT_EQ((int)result.cmd_type, (int)cmd_type)) {
         return 0;
