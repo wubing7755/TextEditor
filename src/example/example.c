@@ -1,5 +1,5 @@
-#include <texteditor/example.h>
-#include <texteditor/version.h>
+#include <example/example.h>
+#include <utils/version.h>
 
 #include <limits.h>
 

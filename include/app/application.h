@@ -1,7 +1,7 @@
 #ifndef TEXTEDITOR_APPLICATION_H
 #define TEXTEDITOR_APPLICATION_H
 
-#include <texteditor/export.h>
+#include <base/export.h>
 
 #ifdef __cplusplus
 extern "C" {
