@@ -5,12 +5,7 @@
 #include <base/types.h>
 
 /* Command Type */
-typedef enum {
-    CMD_NONE,
-    CMD_HELP,
-    CMD_NEW_FILE,
-    CMD_OPEN_FILE
-} CmdType;
+typedef enum { CMD_NONE, CMD_HELP, CMD_NEW_FILE, CMD_OPEN_FILE } CmdType;
 
 /* Error Type */
 typedef enum {
